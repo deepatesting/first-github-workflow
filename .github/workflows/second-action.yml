@@ -1,10 +1,25 @@
-name: First Workflow
-on: workflow_dispatch
+name: Second Workflow
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - ready_for_review
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'dev-*'  # dev-new
+      - 'feat/**' # feat/new feat/new/button
+    paths-ignore:
+      - '.github/workflows/*'
 jobs:
   first-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Print greeting
-        run: echo "Hello World!"
+      - name: Output event data
+        run: echo "${{ toJSON(github.event) }}"
+      - name: Get code
+        uses: actions/checkout@v4
       - name: Print goodbye
         run: echo "Done - bye!"
